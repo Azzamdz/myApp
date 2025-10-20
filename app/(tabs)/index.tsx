@@ -1,121 +1,107 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
 
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 
-export default function HomeScreen() {
+
+
+
+import React, { ReactNode, useRef } from 'react';
+import {
+  Animated,
+  StatusBar,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from 'react-native';
+
+type ParallaxProps = {
+  headerBackgroundColor?: { light: string; dark: string };
+  headerImage?: ReactNode;
+  children: ReactNode;
+  headerHeight?: number;
+};
+
+export default function ParallaxScrollView({
+  headerBackgroundColor = { light: '#A1CEDC', dark: '#3f3c3cff' },
+  headerImage,
+  children,
+  headerHeight = 220,
+}: ParallaxProps) {
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const { height: screenHeight } = useWindowDimensions();
+
+
+  const translateY = scrollY.interpolate({
+    inputRange: [-headerHeight, 0, headerHeight],
+    outputRange: [-headerHeight / 2, 0, headerHeight * 0.75],
+  });
+
+  const scale = scrollY.interpolate({
+    inputRange: [-headerHeight, 0],
+    outputRange: [1.3, 1],
+    extrapolateRight: 'clamp',
+  });
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#3f3c3cff' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      
+    <View style={[styles.container, { backgroundColor: bgColor }]}>
+      <StatusBar barStyle="light-content" />
+      {/* Header dengan efek parallax */}
+      <Animated.View
+        style={[
+          styles.header,
+          {
+            height: headerHeight,
+            transform: [{ translateY }, { scale }],
+            backgroundColor: headerBackgroundColor.light,
+          },
+        ]}
+      >
+        {headerImage}
+        {/* Overlay gradasi agar teks terlihat jelas */}
+        <View style={styles.overlay} />
+      </Animated.View>
 
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-
-      </ThemedView>
-
-
-      <ThemedView style={styles.nameContainer}>
-        <ThemedText type="title" style={styles.nameText}>
-          Azzam Dzikri Al Ghifari
-        </ThemedText>
-      </ThemedView>
-
-
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      {/* Konten utama */}
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true }
+        )}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { minHeight: screenHeight + headerHeight },
+        ]}
+      >
+        <View style={[styles.innerContent, { paddingTop: headerHeight * 0.8 }]}>
+          {children}
+        </View>
+      </Animated.ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    justifyContent: 'center',
-    marginTop: 20,
+  container: {
+    flex: 1,
   },
-  nameContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 20,
-  },
-  nameText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  header: {
     position: 'absolute',
+    width: '100%',
+    top: 0,
+    overflow: 'hidden',
+    zIndex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  innerContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 40,
   },
 });
