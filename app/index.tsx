@@ -3,7 +3,8 @@
 // import Latihan1 from "@/components/latihan/latihan1";
 // import Latihan2 from "@/components/latihan/latihan2";
 // import Latihan3 from "@/components/latihan/latihan3";
-import Latihan4 from "@/components/latihan/latihan4";
+// import Latihan4 from "@/components/latihan/latihan4";
+import HomeScreen from "@/components/tugas/HomeScreen";
 
 
 export default function Index() {
@@ -12,8 +13,9 @@ export default function Index() {
     {/* <Latihan1/> */}
     {/* <Latihan2/> */}
     {/* <Latihan3/> */}
-    <Latihan4/>
+    {/* <Latihan4/> */}
     {/* <LoginScreen/> */}
+    <HomeScreen/>
     </>
   );
 }
