@@ -1,6 +1,52 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
 import { SafeAreaView } from "react-native-safe-area-context";
+
+const notes = [
+  {
+    id: "1",
+    title: "Belajar membuat aplikasi mobile",
+    desc: "Belajar membuat aplikasi mobile",
+    date: " 29 oktober 2025",
+    image: require("@/assets/images/programing 1.png"),
+  },
+  {
+    id: "2",
+    title: "Belajar membuat aplikasi mobile",
+    desc: "Belajar membuat aplikasi mobile",
+    date: " 23 oktober 2025",
+    image: require("@/assets/images/programing 2.png"),
+  },
+];
+
+type Note = {
+  id: number;
+  title: string;
+  desc: string;
+  date: string;
+  image: any;
+};
+
+const NoteItem = ({ item }: { item: Note }) => {
+  return (
+    <View style={styles.card}>
+      <Image style={{ width: 80, height: 80 }} source={item.image} />
+      <View style={styles.cardContainer}>
+        <Text style={styles.cardTitle}>{item.title}</Text>
+        <Text style={styles.cardDesc}>{item.desc}</Text>
+        <Text style={styles.cardDate}>{item.date}</Text>
+      </View>
+    </View>
+  );
+};
 
 export default function HomeScreen() {
   return (
@@ -13,67 +59,16 @@ export default function HomeScreen() {
         <Text style={styles.kodeinText}>Kodein</Text>
         <Text style={styles.notesText}>Notes</Text>
       </View>
+
       <View style={styles.content}>
-        <View style={styles.card}>
-          <Image
-            style={{ width: 80, height: 80 }}
-            source={require("@/assets/images/programing 1.png")}
-          />
-
-          <View style={styles.cardContainer}>
-            <Text style={styles.cardTitle}>Ide Konten</Text>
-            <Text style={styles.cardDesc}>
-              Tips belajar React untuk pemula.
-            </Text>
-            <Text style={styles.cardDate}>Selasa, 13 Mei 2025</Text>
-          </View>
-        </View>
-
-        <View style={styles.card}>
-          <Image
-            style={{ width: 80, height: 80 }}
-            source={require("@/assets/images/programing 2.png")}
-          />
-
-          <View style={styles.cardContainer}>
-            <Text style={styles.cardTitle}>Ide Konten</Text>
-            <Text style={styles.cardDesc}>
-              Tips belajar React untuk pemula.
-            </Text>
-            <Text style={styles.cardDate}>Selasa, 13 Mei 2025</Text>
-          </View>
-        </View>
-
-        <View style={styles.card}>
-          <Image
-            style={{ width: 80, height: 80 }}
-            source={require("@/assets/images/programing 3.png")}
-          />
-
-          <View style={styles.cardContainer}>
-            <Text style={styles.cardTitle}>Ide Konten</Text>
-            <Text style={styles.cardDesc}>
-              Tips belajar React untuk pemula.
-            </Text>
-            <Text style={styles.cardDate}>Selasa, 13 Mei 2025</Text>
-          </View>
-        </View>
-
-        <View style={styles.card}>
-          <Image
-            style={{ width: 80, height: 80 }}
-            source={require("@/assets/images/programing 4.png")}
-          />
-
-          <View style={styles.cardContainer}>
-            <Text style={styles.cardTitle}>Ide Konten</Text>
-            <Text style={styles.cardDesc}>
-              Tips belajar React untuk pemula.
-            </Text>
-            <Text style={styles.cardDate}>Selasa, 13 Mei 2025</Text>
-          </View>
-        </View>
+        <FlatList
+          data={notes}
+          renderItem={({ item }) => <NoteItem item={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={{ gap: 16 }}
+        />
       </View>
+
       <TouchableOpacity style={styles.fab}>
         <Ionicons name="add" size={32} color="white" />
       </TouchableOpacity>
@@ -109,19 +104,20 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   card: {
-    backgroundColor: "white",
+    elevation: 1,
     borderRadius: 8,
-    elevation: 2,
     padding: 16,
     marginBottom: 16,
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#e6e6e6",
+    backgroundColor: "#fff",
   },
   cardContainer: {
     flex: 1,
-    paddingLeft: 12,
+    padding: 8,
+    gap: 4,
   },
   cardTitle: {
     fontSize: 16,
@@ -140,7 +136,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: "#999",
   },
-
   fab: {
     position: "absolute",
     bottom: 35,
