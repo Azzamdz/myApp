@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   FlatList,
   Image,
+  ImageSourcePropType,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,18 +13,32 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const notes = [
   {
-    id: "1",
+    id: 1,
     title: "Belajar membuat aplikasi mobile",
     desc: "Belajar membuat aplikasi mobile",
     date: " 29 oktober 2025",
+    image: require("@/assets/images/programing 0.png"),
+  },
+  {
+    id: 2,
+    title: "Belajar membuat aplikasi mobile",
+    desc: "Belajar membuat aplikasi mobile",
+    date: " 23 oktober 2025",
     image: require("@/assets/images/programing 1.png"),
   },
   {
-    id: "2",
+    id: 3,
     title: "Belajar membuat aplikasi mobile",
     desc: "Belajar membuat aplikasi mobile",
     date: " 23 oktober 2025",
     image: require("@/assets/images/programing 2.png"),
+  },
+  {
+    id: 4,
+    title: "Belajar membuat aplikasi mobile",
+    desc: "Belajar membuat aplikasi mobile",
+    date: " 23 oktober 2025",
+    image: require("@/assets/images/programing 3.png"),
   },
 ];
 
@@ -32,7 +47,7 @@ type Note = {
   title: string;
   desc: string;
   date: string;
-  image: any;
+  image: ImageSourcePropType | { uri: string };
 };
 
 const NoteItem = ({ item }: { item: Note }) => {
@@ -66,6 +81,7 @@ export default function HomeScreen() {
           renderItem={({ item }) => <NoteItem item={item} />}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{ gap: 16 }}
+          ListEmptyComponent={() => <EmptyData />}
         />
       </View>
 
@@ -75,6 +91,14 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
+
+const EmptyData = () => {
+  return (
+    <View>
+      <Text>No notes available.</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -127,13 +151,10 @@ const styles = StyleSheet.create({
   },
   cardDesc: {
     fontSize: 14,
-    fontWeight: "400",
     color: "#555",
-    marginBottom: 4,
   },
   cardDate: {
     fontSize: 12,
-    fontWeight: "400",
     color: "#999",
   },
   fab: {
