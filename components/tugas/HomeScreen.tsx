@@ -11,7 +11,7 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const notes = [
+const notes: Note[] = [
   {
     id: 1,
     title: "Belajar membuat aplikasi mobile",
@@ -35,6 +35,27 @@ const notes = [
   },
   {
     id: 4,
+    title: "Belajar membuat aplikasi mobile",
+    desc: "Belajar membuat aplikasi mobile",
+    date: " 23 oktober 2025",
+    image: require("@/assets/images/programing 3.png"),
+  },
+  {
+    id: 5,
+    title: "Belajar membuat aplikasi mobile",
+    desc: "Belajar membuat aplikasi mobile",
+    date: " 23 oktober 2025",
+    image: require("@/assets/images/programing 3.png"),
+  },
+  {
+    id: 6,
+    title: "Belajar membuat aplikasi mobile",
+    desc: "Belajar membuat aplikasi mobile",
+    date: " 23 oktober 2025",
+    image: require("@/assets/images/programing 3.png"),
+  },
+  {
+    id: 7,
     title: "Belajar membuat aplikasi mobile",
     desc: "Belajar membuat aplikasi mobile",
     date: " 23 oktober 2025",
@@ -80,7 +101,7 @@ export default function HomeScreen() {
           data={notes}
           renderItem={({ item }) => <NoteItem item={item} />}
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ gap: 16 }}
+          contentContainerStyle={{ gap: 16, flexGrow: 1 }}
           ListEmptyComponent={() => <EmptyData />}
         />
       </View>
@@ -94,8 +115,15 @@ export default function HomeScreen() {
 
 const EmptyData = () => {
   return (
-    <View>
-      <Text>No notes available.</Text>
+    <View style={styles.emptyContainer}>
+      <Image
+        style={{ width: 150, height: 150 }}
+        source={require("@/assets/images/empty.png")}
+      />
+      <Text style={styles.emptyTitle}>Add your first note</Text>
+      <Text style={styles.emptyDesc}>
+        Save your thoughts, tasks or inspirations
+      </Text>
     </View>
   );
 };
@@ -167,5 +195,21 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
+  },
+  emptyTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 8,
+  },
+  emptyDesc: {
+    fontSize: 16,
+    color: "gray",
   },
 });
