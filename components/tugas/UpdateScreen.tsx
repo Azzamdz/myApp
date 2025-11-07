@@ -23,13 +23,11 @@ export default function UpdateScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* App Bar */}
       <View style={styles.appBar}>
         <Ionicons name="arrow-back" size={24} color="#FF5B13" />
         <Text style={styles.appBarTitle}>Update Note</Text>
       </View>
 
-      {/* Konten Scroll */}
       <ScrollView style={styles.form}>
         <TextInput
           style={styles.inputTitle}
