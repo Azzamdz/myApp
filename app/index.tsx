@@ -22,15 +22,20 @@ type Note = {
 };
 
 const NoteItem = ({ item }: { item: Note }) => {
+  const router = useRouter();
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => router.push(`/detail/${item.id}`)}
+    >
       <Image style={{ width: 80, height: 80 }} source={item.image} />
       <View style={styles.cardContainer}>
         <Text style={styles.cardTitle}>{item.title}</Text>
         <Text style={styles.cardDesc}>{item.desc}</Text>
         <Text style={styles.cardDate}>{item.date}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
